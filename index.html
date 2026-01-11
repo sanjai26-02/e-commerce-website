@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopHub - E-Commerce Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar" class="hidden">
+        <div class="nav-content">
+            <div class="logo">🛒 ShopHub</div>
+            <div class="nav-links" id="navLinks"></div>
+        </div>
+    </nav>
+
+    <!-- User Registration Page -->
+    <div id="registerPage" class="hidden">
+        <div class="auth-container">
+            <h2>Create Account</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="regPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="regAddress" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <button type="submit">Register</button>
+                <div class="link-text">
+                    Already have an account? <a onclick="showPage('loginPage')">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Login Page -->
+    <div id="loginPage" class="hidden">
+        <div class="auth-container">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+                <div class="link-text">
+                    Don't have an account? <a onclick="showPage('registerPage')">Register here</a>
+                </div>
+                <div class="link-text">
+                    <a onclick="showPage('adminLoginPage')">Admin Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Page -->
+    <div id="adminLoginPage" class="hidden">
+        <div class="auth-container">
+            <h2>Admin Login</h2>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="adminEmail" value="admin@shophub.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPassword" value="admin123">
+                </div>
+                <button type="submit">Login as Admin</button>
+                <div class="link-text">
+                    <a onclick="showPage('loginPage')">Back to User Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="dashboardPage" class="hidden">
+        <div class="container">
+            <h1>Our Products</h1>
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+    </div>
+
+    <!-- Product Detail Page -->
+    <div id="productDetailPage" class="hidden">
+        <div class="container">
+            <button onclick="showPage('dashboardPage')" style="width: auto; margin-bottom: 1rem;">← Back to Products</button>
+            <div class="product-detail" id="productDetail"></div>
+        </div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cartPage" class="hidden">
+        <div class="container">
+            <h1>Shopping Cart</h1>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-summary" id="cartSummary"></div>
+        </div>
+    </div>
+
+    <!-- Order Page -->
+    <div id="orderPage" class="hidden">
+        <div class="container">
+            <div class="auth-container" style="max-width: 600px;">
+                <h2>Order Details</h2>
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label>Delivery Address</label>
+                        <textarea id="deliveryAddress" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="deliveryPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="cod">Cash on Delivery</option>
+                        </select>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Amount:</span>
+                        <span id="orderTotal" style="font-weight: bold; color: #667eea;"></span>
+                    </div>
+                    <button type="submit">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Orders Page -->
+    <div id="myOrdersPage" class="hidden">
+        <div class="container">
+            <h1>My Orders</h1>
+            <div class="orders-list" id="ordersList"></div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboardPage" class="hidden">
+        <div class="container">
+            <h1>Admin Dashboard</h1>
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalOrders">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCustomers">0</div>
+                    <div class="stat-label">Total Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRevenue">₹0</div>
+                    <div class="stat-label">Total Revenue</div>
+                </div>
+            </div>
+            <div class="admin-actions">
+                <div class="action-btn" onclick="showPage('addProductPage')">
+                    <div class="action-icon">📦</div>
+                    <div>Add Product</div>
+                </div>
+                <div class="action-btn" onclick="showPage('adminOrdersPage')">
+                    <div class="action-icon">📋</div>
+                    <div>View Orders</div>
+                </div>
+                <div class="action-btn" onclick="showPage('adminCustomersPage')">
+                    <div class="action-icon">👥</div>
+                    <div>View Customers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Page -->
+    <div id="addProductPage" class="hidden">
+        <div class="container">
+            <div class="auth-container" style="max-width: 600px;">
+                <h2>Add New Product</h2>
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Icon (Emoji)</label>
+                        <input type="text" id="productIcon" placeholder="e.g., 📱, 💻, 👕" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" id="productPrice" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="productCategory" required>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Books">Books</option>
+                            <option value="Home">Home & Kitchen</option>
+                            <option value="Sports">Sports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="productDescription" rows="4" required></textarea>
+                    </div>
+                    <button type="submit">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Orders Page -->
+    <div id="adminOrdersPage" class="hidden">
+        <div class="container">
+            <h1>All Orders</h1>
+            <div id="adminOrdersList"></div>
+        </div>
+    </div>
+
+    <!-- Admin Customers Page -->
+    <div id="adminCustomersPage" class="hidden">
+        <div class="container">
+            <h1>All Customers</h1>
+            <div id="adminCustomersList"></div>
+        </div>
+    </div>
+</body>
+
+    <script>
+        let currentUser = null;
+        let currentUserType = null;
+        let users = [];
+        let products = [
+            {id: 1, name: 'Smartphone X', icon: '📱', price: 29999, category: 'Electronics', description: 'Latest smartphone with amazing features and high-performance processor.'},
+            {id: 2, name: 'Laptop Pro', icon: '💻', price: 54999, category: 'Electronics', description: 'Professional laptop for work and entertainment.'},
+            {id: 3, name: 'Wireless Headphones', icon: '🎧', price: 2999, category: 'Electronics', description: 'Premium sound quality with noise cancellation.'},
+            {id: 4, name: 'Smart Watch', icon: '⌚', price: 12999, category: 'Electronics', description: 'Track your fitness and stay connected.'},
+            {id: 5, name: 'T-Shirt', icon: '👕', price: 599, category: 'Clothing', description: 'Comfortable cotton t-shirt in various colors.'},
+            {id: 6, name: 'Running Shoes', icon: '👟', price: 3499, category: 'Sports', description: 'Professional running shoes for athletes.'}
+        ];
+        let cart = [];
+        let orders = [];
+        let selectedProduct = null;
+
+        function showPage(pageId) {
+            document.querySelectorAll('body > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            const navbar = document.getElementById('navbar');
+            if (pageId === 'registerPage' || pageId === 'loginPage' || pageId === 'adminLoginPage') {
+                navbar.classList.add('hidden');
+            } else {
+                navbar.classList.remove('hidden');
+                updateNavbar();
+            }
+
+            if (pageId === 'dashboardPage') renderProducts();
+            if (pageId === 'cartPage') renderCart();
+            if (pageId === 'myOrdersPage') renderMyOrders();
+            if (pageId === 'adminDashboardPage') renderAdminDashboard();
+            if (pageId === 'adminOrdersPage') renderAdminOrders();
+            if (pageId === 'adminCustomersPage') renderAdminCustomers();
+        }
+
+        function updateNavbar() {
+            const navLinks = document.getElementById('navLinks');
+            if (currentUserType === 'user') {
+                navLinks.innerHTML = `
+                    <a onclick="showPage('dashboardPage')">Products</a>
+                    <a onclick="showPage('cartPage')">Cart <span class="cart-badge">${cart.length}</span></a>
+                    <a onclick="showPage('myOrdersPage')">My Orders</a>
+                    <a onclick="logout()">Logout</a>
+                `;
+            } else if (currentUserType === 'admin') {
+                navLinks.innerHTML = `
+                    <a onclick="showPage('adminDashboardPage')">Dashboard</a>
+                    <a onclick="showPage('addProductPage')">Add Product</a>
+                    <a onclick="showPage('adminOrdersPage')">Orders</a>
+                    <a onclick="showPage('adminCustomersPage')">Customers</a>
+                    <a onclick="logout()">Logout</a>
+                `;
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = {
+                id: Date.now(),
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                address: document.getElementById('regAddress').value,
+                password: document.getElementById('regPassword').value
+            };
+            users.push(user);
+            showNotification('Registration successful! Please login.');
+            showPage('loginPage');
+            this.reset();
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                currentUserType = 'user';
+                showNotification('Login successful!');
+                showPage('dashboardPage');
+            } else {
+                alert('Invalid credentials!');
+            }
+            this.reset();
+        });
+
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (email === 'admin@shophub.com' && password === 'admin123') {
+                currentUser = {name: 'Admin', email: email};
+                currentUserType = 'admin';
+                showNotification('Admin login successful!');
+                showPage('adminDashboardPage');
+            } else {
+                alert('Invalid admin credentials!');
+            }
+        });
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">${product.icon}</div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">₹${product.price}</div>
+                        <div class="product-description">${product.description.substring(0, 60)}...</div>
+                        <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewProduct(id) {
+            selectedProduct = products.find(p => p.id === id);
+            const detail = document.getElementById('productDetail');
+            detail.innerHTML = `
+                <div class="product-detail-image">${selectedProduct.icon}</div>
+                <div class="product-detail-info">
+                    <h1>${selectedProduct.name}</h1>
+                    <div class="product-detail-price">₹${selectedProduct.price}</div>
+                    <p><strong>Category:</strong> ${selectedProduct.category}</p>
+                    <p style="margin-top: 1rem;">${selectedProduct.description}</p>
+                    <div class="quantity-selector">
+                        <span>Quantity:</span>
+                        <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                        <span id="quantity">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                    </div>
+                    <button onclick="addToCartWithQuantity()" style="margin-top: 1rem;">Add to Cart</button>
+                </div>
+            `;
+            showPage('productDetailPage');
+        }
+
+        let quantity = 1;
+        function changeQuantity(change) {
+            quantity = Math.max(1, quantity + change);
+            document.getElementById('quantity').textContent = quantity;
+        }
+
+        function addToCartWithQuantity() {
+            for (let i = 0; i < quantity; i++) {
+                addToCart(selectedProduct.id);
+            }
+            quantity = 1;
+            showNotification(`${selectedProduct.name} added to cart!`);
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push({...product, cartId: Date.now()});
+            updateNavbar();
+            showNotification(`${product.name} added to cart!`);
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartSummary = document.getElementById('cartSummary');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🛒</div><h3>Your cart is empty</h3></div>';
+                cartSummary.innerHTML = '';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <div class="cart-item-image">${item.icon}</div>
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₹${item.price}</div>
+                    </div>
+                    <button class="btn-remove" onclick="removeFromCart(${index})">Remove</button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartSummary.innerHTML = `
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>₹${total}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery:</span>
+                    <span>₹50</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span>₹${total + 50}</span>
+                </div>
+                <button onclick="proceedToCheckout()">Proceed to Checkout</button>
+            `;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+            updateNavbar();
+            showNotification('Item removed from cart');
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            document.getElementById('deliveryAddress').value = currentUser.address;
+            document.getElementById('deliveryPhone').value = currentUser.phone;
+            const total = cart.reduce((sum, item) => sum + item.price, 0) + 50;
+            document.getElementById('orderTotal').textContent = `₹${total}`;
+            showPage('orderPage');
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const order = {
+                id: Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userEmail: currentUser.email,
+                items: [...cart],
+                total: cart.reduce((sum, item) => sum + item.price, 0) + 50,
+                address: document.getElementById('deliveryAddress').value,
+                phone: document.getElementById('deliveryPhone').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                status: 'Pending',
+                date: new Date().toLocaleDateString()
+            };
+            orders.push(order);
+            cart = [];
+            updateNavbar();
+            showNotification('Order placed successfully!');
+            showPage('myOrdersPage');
+            this.reset();
+        });
+
+        function renderMyOrders() {
+            const ordersList = document.getElementById('ordersList');
+            const userOrders = orders.filter(o => o.userId === currentUser.id);
+            
+            if (userOrders.length === 0) {
+                ordersList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><h3>No orders yet</h3></div>';
+                return;
+            }
+
+            ordersList.innerHTML = userOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #${order.id}</div>
+                            <div style="color: #666; font-size: 0.9rem;">${order.date}</div>
+                        </div>
+                        <div class="order-status status-${order.status.toLowerCase()}">${order.status}</div>
+                    </div>
+                    <div>
+                        <strong>Items:</strong> ${order.items.map(i => i.name).join(', ')}
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <strong>Total:</strong> ₹${order.total}
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <strong>Payment:</strong> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : order.paymentMethod}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const product = {
+                id: Date.now(),
+                name: document.getElementById('productName').value,
+                icon: document.getElementById('productIcon').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value,
+                description: document.getElementById('productDescription').value
+            };
+            products.push(product);
+            showNotification('Product added successfully!');
+            showPage('adminDashboardPage');
+            this.reset();
+        });
+
+        function renderAdminDashboard() {
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('totalCustomers').textContent = users.length;
+            const revenue = orders.reduce((sum, order) => sum + order.total, 0);
+            document.getElementById('totalRevenue').textContent = `₹${revenue}`;
+        }
+
+        function renderAdminOrders() {
+            const ordersList = document.getElementById('adminOrdersList');
+            
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><h3>No orders yet</h3></div>';
+                return;
+            }
+
+            ordersList.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orders.map(order => `
+                            <tr>
+                                <td>#${order.id}</td>
+                                <td>${order.userName}</td>
+                                <td>${order.items.length} items</td>
+                                <td>₹${order.total}</td>
+                                <td><span class="order-status status-${order.status.toLowerCase()}">${order.status}</span></td>
+                                <td>${order.date}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function renderAdminCustomers() {
+            const customersList = document.getElementById('adminCustomersList');
+            
+            if (users.length === 0) {
+                customersList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><h3>No customers yet</h3></div>';
+                return;
+            }
+
+            customersList.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => `
+                            <tr>
+                                <td>${user.name}</td>
+                                <td>${user.email}</td>
+                                <td>${user.phone}</td>
+                                <td>${user.address}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            cart = [];
+            showNotification('Logged out successfully!');
+            showPage('loginPage');
+        }
+
+        showPage('registerPage');
